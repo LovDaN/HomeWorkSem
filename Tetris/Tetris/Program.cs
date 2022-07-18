@@ -91,17 +91,20 @@ namespace Tetris
             return n;
         }
         static int SwitchLeft(int[,] arr, int n, int j)
-        {    
-            if (j-1 < 0) ++j;
-                arr[n, j] = 1;
-                arr[n, j + 1] = 0;
+        {
+            if (j - 1 < 0) j = 0;
+            
+            arr[n, j] = 1;
+            arr[n, j + 1] = 0;
+            if (arr[n, j - 1] == 2) j++;
             return j;
         }
         static int SwitchRight(int[,] arr, int n, int j)
         {
-            if (j + 1 > 10) j--;
-                arr[n, j] = 1;
-                arr[n, j - 1] = 0;   
+            if (j + 1 > 10) j = 10;
+            else if (arr[n, j+1] == 2) j--;
+            arr[n, j] = 1;
+            arr[n, j - 1] = 0;
             return j;
         }
         static void PrintArray(int[,] arr)
