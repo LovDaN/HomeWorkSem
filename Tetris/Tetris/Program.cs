@@ -11,9 +11,9 @@ namespace Tetris
         static void Main(string[] args)
         {
             Console.WriteLine("Добро пожаловать в Tetris!");
-            Console.WriteLine("Чтобы поиграть используйте NUM PUD");
-            Console.WriteLine("Для управления единичкой используйте клавиши 1,2 и 3");
-            Console.WriteLine("1 <--  "+"2 Вниз  "+"3 -->");
+            Console.WriteLine("Для управления единичкой используйте клавиши (стрелочки)");
+            Console.WriteLine("Влево <--  "+"Вниз Стрелочка Вниз или любая клавиша  "+"Вправо -->");
+            Console.WriteLine("Для выхода из программы нажмите клавишу Esc");
             Console.WriteLine("Для продолжения нажмите на любую клавишу");
             Console.ReadKey();
             Console.Clear();
@@ -42,48 +42,40 @@ namespace Tetris
             PrintArray(field);
             int count = 0;
             int strin = 4;
-            
+            ConsoleKeyInfo cki;
 
 
-            while (true)
+            do
             {
                 CheckEnd(field);
-                int key = Convert.ToInt32(Console.ReadLine());
-                if (key == 1 || key == 2 || key == 3)
+                cki = Console.ReadKey();
+
+                if (cki.Key == ConsoleKey.DownArrow)
                 {
-                    switch (key)
-                    {
-                        case 2:
-                            ++count;
-                            count = SwitchDown(field, count, strin);
-                            Console.Clear();
-                            break;
-                        case 1:
-                            strin--;
-                            SwitchLeft(field, count, strin);
-                            Console.Clear();
-                            break;
-                        case 3:
-                            strin++;
-                            SwitchRight(field, count, strin);
-                            Console.Clear();
-                            break;
-                        default:
-                            ++count;
-                            count = SwitchDown(field, count, strin);
-                            Console.Clear();
-                            break;
-                    }
+                    count++;
+                    count = SwitchDown(field, count, strin);
+                    Console.Clear();
+                }
+                else if (cki.Key == ConsoleKey.LeftArrow)
+                {
+                    strin--;
+                    strin = SwitchLeft(field, count, strin);
+                    Console.Clear();
+                }
+                else if (cki.Key == ConsoleKey.RightArrow)
+                {
+                    strin++;
+                    strin = SwitchRight(field, count, strin);
+                    Console.Clear();
                 }
                 else
                 {
                     ++count;
                     count = SwitchDown(field, count, strin);
                     Console.Clear();
-                }
-                
+                }           
                 PrintArray(field);
-            }
+            }while (cki.Key != ConsoleKey.Escape);
             
         }
         static int SwitchDown(int[,] arr, int n, int j)
@@ -98,15 +90,19 @@ namespace Tetris
             }
             return n;
         }
-        static void SwitchLeft(int[,] arr, int n, int j)
-        {
-            arr[n, j] = 1;
-            arr[n, j+1] = 0;
+        static int SwitchLeft(int[,] arr, int n, int j)
+        {    
+            if (j-1 < 0) ++j;
+                arr[n, j] = 1;
+                arr[n, j + 1] = 0;
+            return j;
         }
-        static void SwitchRight(int[,] arr, int n, int j)
+        static int SwitchRight(int[,] arr, int n, int j)
         {
-            arr[n, j] = 1;
-            arr[n, j-1] = 0;
+            if (j + 1 > 10) j--;
+                arr[n, j] = 1;
+                arr[n, j - 1] = 0;   
+            return j;
         }
         static void PrintArray(int[,] arr)
         {
